@@ -12,6 +12,15 @@
       ]
     },
     {
+      "type": "cosmosDB",
+      "direction": "out",
+      "name": "doc",
+      "databaseName": "openhack",
+      "collectionName": "ratings",
+      "createIfNotExists": "true",
+      "connectionStringSetting": "https://cosmorating.documents.azure.com:443/"
+    },
+    {
       "type": "http",
       "direction": "out",
       "name": "$return"
