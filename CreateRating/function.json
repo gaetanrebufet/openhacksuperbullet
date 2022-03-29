@@ -18,7 +18,7 @@
       "databaseName": "openhack",
       "collectionName": "ratings",
       "createIfNotExists": "true",
-      "connectionStringSetting": "https://cosmorating.documents.azure.com:443/"
+      "connectionStringSetting": "COSMOSDB_CONNECTION"
     },
     {
       "type": "http",

@@ -73,7 +73,7 @@ def main(req: func.HttpRequest, doc: func.Out[func.Document]) -> func.HttpRespon
 
     if rating.isValid():
         json_doc = rating.printJson()
-        doc.set(json_doc)
+        doc.set(func.Document.from_json(json_doc))
         return func.HttpResponse(json_doc)
     else:
         return func.HttpResponse(
