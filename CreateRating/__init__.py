@@ -2,6 +2,13 @@ import logging
 import uuid
 import azure.functions as func
 import time
+import requests
+
+def validateUser(user):
+    logging.info('user ' + user)
+    usercall = requests.get('https://serverlessohapi.azurewebsites.net/api/GetUser', params = {'userId': str(user)})
+    return usercall.status_code == requests.codes.ok
+
 
 def getParam(req, text):
     param = req.params.get(text)
@@ -31,7 +38,7 @@ class Rating:
         return False
 
     def isValid(self):
-        if self.isValidRating():
+        if self.isValidRating() and validateUser(self.userId):
             return True
         return False
     
