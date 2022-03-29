@@ -1,7 +1,7 @@
 import logging
 import uuid
 import azure.functions as func
-
+import time
 
 def getParam(req, text):
     param = req.params.get(text)
@@ -15,19 +15,26 @@ def getParam(req, text):
     return param
 
 class Rating:
-    def __init__(self, userId, productId, locationName, rating, userNotes) -> None:
+    def __init__(self, userId, productId, locationName, rating, userNotes):
         self.userId = userId
         self.productId = productId
         self.locationName = locationName
         self.rating = rating
         self.userNotes = userNotes
         self.id = str(uuid.uuid4())
-    
+        self.timestamp = time.time()
+
+    def isValidRating(self):
+        rating = self.rating
+        if int(rating) >=0 and int(rating) <=5:
+            return True
+        return False
+
     def isValid(self):
-        return True
-
+        if self.isValidRating():
+            return True
+        return False
     
-
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
