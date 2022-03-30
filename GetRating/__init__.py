@@ -1,22 +1,13 @@
 import logging
-
+import json
 import azure.functions as func
 
 
-def main(req: func.HttpRequest) -> func.HttpResponse:
+def main(req: func.HttpRequest, ratings: func.DocumentList) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
-    name = req.params.get('name')
-    if not name:
-        try:
-            req_body = req.get_json()
-        except ValueError:
-            pass
-        else:
-            name = req_body.get('name')
-
-    if name:
-        return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
+    if ratings:
+        return func.HttpResponse(func.Document.to_json(ratings[0]))
     else:
         return func.HttpResponse(
              "New code for failure",
