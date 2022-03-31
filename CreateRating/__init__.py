@@ -60,6 +60,28 @@ class Rating:
         json_data["timestamp"] = str(self.timestamp)
         return json.dumps(json_data)
 
+    def checkAlert(self):
+        url = "https://languageparser.cognitiveservices.azure.com/text/analytics/v3.2-preview.1/sentiment?opinionMining=true"
+        payload = {}
+        payload["documents"] = []
+        document = {}
+        document["id"] = "1"
+        document["text"] = self.userNotes
+        payload["documents"].append(document)
+
+        params = {}
+        params["Ocp-Apim-Subscription-Key"] = "cee4813143494a26854eb29e7f56ba77"
+        req = requests.post(url, headers=params, data=json.dumps(payload))
+        output = req.json()
+        logging.info("result: "+ str(output))
+
+        sentiment = {}
+        #result = json.loads(output)
+        sentiment["scores"] = output["documents"][0]["confidenceScores"]
+        if (sentiment["scores"]["negative"] > 0.7):
+            logging.warning("Negative userNotes")
+
+
 def main(req: func.HttpRequest, doc: func.Out[func.Document]) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
@@ -72,6 +94,7 @@ def main(req: func.HttpRequest, doc: func.Out[func.Document]) -> func.HttpRespon
     rating = Rating(userId, productId, locationName, rating, userNotes)
 
     if rating.isValid():
+        rating.checkAlert()
         json_doc = rating.printJson()
         doc.set(func.Document.from_json(json_doc))
         return func.HttpResponse(json_doc)
