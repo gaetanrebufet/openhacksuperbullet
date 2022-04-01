@@ -2,6 +2,7 @@ import logging
 import json
 import azure.functions as func
 import requests
+import os
 
 def getSentiment(notes):
     url = "https://languageparser.cognitiveservices.azure.com/text/analytics/v3.2-preview.1/sentiment?opinionMining=true"
@@ -13,7 +14,7 @@ def getSentiment(notes):
     payload["documents"].append(document)
 
     params = {}
-    params["Ocp-Apim-Subscription-Key"] = "cee4813143494a26854eb29e7f56ba77"
+    params["Ocp-Apim-Subscription-Key"] = os.getenv("Ocp-Apim-Subscription-Key")
     req = requests.post(url, headers=params, data=json.dumps(payload))
     output = req.json()
     logging.info("result: "+ str(output))

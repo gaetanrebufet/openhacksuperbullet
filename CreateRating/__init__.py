@@ -4,6 +4,7 @@ import azure.functions as func
 import time
 import requests
 import json
+import os
 
 def validateUser(userId):
     logging.info('userId ' + userId)
@@ -70,7 +71,7 @@ class Rating:
         payload["documents"].append(document)
 
         params = {}
-        params["Ocp-Apim-Subscription-Key"] = "cee4813143494a26854eb29e7f56ba77"
+        params["Ocp-Apim-Subscription-Key"] = os.getenv("Ocp-Apim-Subscription-Key")
         req = requests.post(url, headers=params, data=json.dumps(payload))
         output = req.json()
         logging.info("result: "+ str(output))
